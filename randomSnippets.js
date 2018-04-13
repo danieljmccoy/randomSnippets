@@ -1063,5 +1063,30 @@ return clockSpiral(input, result);
 }
 
 var result = clockSpiral(input, []);
-
 console.log('result', result);
+
+
+
+// quick string replace/overwrite type function via mdn
+function replaceString(oldS, newS, fullS) {
+  return fullS.split(oldS).join(newS);
+}
+
+
+function AdditivePersistence(num) { 
+  var count = 0;
+  var res = num.toString().split("").map(Number);
+  var x = 0;
+    
+   while(res.length > 1) {
+     for(var i = 0; i < res.length; i++) {
+       x += res[i];
+     }
+       count++
+       res = x.toString().split("").map(Number);
+       x = 0;  // you left out this line
+   }
+    return count;
+  }
+
+  AdditivePersistence(2899);
