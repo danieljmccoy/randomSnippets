@@ -1073,6 +1073,22 @@ function replaceString(oldS, newS, fullS) {
 }
 
 
+// additive persistence 1
+function AdditivePersistence(num) {
+  if(num.toString().length <= 1) {
+    return 0;
+  } else {
+    var newNum = num.toString().split("").map(Number).reduce(function(a,b) {
+      return a + b;
+    });
+    return 1 + AdditivePersistence(newNum);
+  }
+}
+
+AdditivePersistence(19);
+
+
+// additive persistence 2
 function AdditivePersistence(num) { 
   var count = 0;
   var res = num.toString().split("").map(Number);
