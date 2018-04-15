@@ -65,8 +65,8 @@ function listAllValues(obj) {
 // [['make', 'Ford'], ['model', 'Mustang'], ['year', 1964]]
 function fromListToObject(source) {
 	var result = {}, iLen = source.length;
-	for (var i = 0; i < iLen; i++)
-  result[source[i][0]] = source[i][1];
+	  for (var i = 0; i < iLen; i++)
+      result[source[i][0]] = source[i][1];
 	return result;
 }
 
@@ -1106,3 +1106,49 @@ function AdditivePersistence(num) {
   }
 
   AdditivePersistence(2899);
+
+
+
+  // if array has objects with equal properties, add them together.
+  var input = [
+    {a: 2, b: 5, c: 6},
+    {a: 3, b: 4, d: 1},
+    {a: 1, d: 2}
+  ];
+  
+  var answer = input.reduce(function(acc, curr) {
+      for (var p in curr) {
+          acc[p] = (acc[p] || 0) + curr[p];
+      }
+  
+      return acc; // this will be passed as prev in the next iteration or returned as the result.
+  }, {}); // The {} is the initial value passed as prev
+  
+  console.log(answer);
+
+
+
+  var a = [{a: 2, b: 5, c: 6}, {a:3, b: 4, d:1},{a: 1, d: 2}];
+  var ans = {};
+  for(var i = 0; i < a.length; ++i){
+    for(var obj in a[i]){
+     ans[obj] = ans[obj] ? ans[obj] + a[i][obj] : a[i][obj];
+    }
+  }
+
+console.log(ans);
+
+// this line above => ans[obj] = ans[obj] ? ans[obj] + a[i][obj] : a[i][obj] is same as below;
+
+var arr = [{a: 2, b: 5, c: 6}, {a:3, b: 4, d:1},{a: 1, d: 2}];
+var obj = {};
+  for(var i = 0; i < arr.length; ++i){
+    for(var prop in arr[i]){
+     if(obj[prop])
+        obj[prop] = obj[prop] + arr[i][prop];
+     else 
+        obj[prop] = arr[i][prop];
+    }
+  }
+
+
