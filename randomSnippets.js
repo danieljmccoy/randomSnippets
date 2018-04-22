@@ -1,3 +1,5 @@
+// Many examples here use var for playing around via live console testing. 
+
 // first element of the array is the object key and the last element is the object value
 // example input
 // ['Queen', 'Elizabeth', 'Of Hearts', 'Beyonce']
@@ -69,6 +71,7 @@ function fromListToObject(source) {
       result[source[i][0]] = source[i][1];
 	return result;
 }
+
 
 // output
 // Object {"make": "Ford","model": "Mustang","year": 1964}
@@ -797,7 +800,7 @@ function extractMiddle(str) {
       
           if(arr[i] - arr[currMin] > arr[maxIdx] - arr[minIdx]) { 
             maxIdx = i;
-            minIdx = currMin;
+            minIdx = currMin; 
           }
     
         }
@@ -997,7 +1000,7 @@ function mergeRanges(meetings) {
 
       var currentMeeting    = sortedMeetings[i];
       var lastMergedMeeting = mergedMeetings[mergedMeetings.length - 1];
-
+    
       // if the current and last meetings overlap, use the latest end time
       // objects, and arrays (which are objects) all are passed by reference. thus change will be recorded.
       if (currentMeeting.startTime <= lastMergedMeeting.endTime) {
@@ -1130,25 +1133,49 @@ function AdditivePersistence(num) {
 
   var a = [{a: 2, b: 5, c: 6}, {a:3, b: 4, d:1},{a: 1, d: 2}];
   var ans = {};
-  for(var i = 0; i < a.length; ++i){
+  for(var i = 0; i < a.length; i++){
     for(var obj in a[i]){
-     ans[obj] = ans[obj] ? ans[obj] + a[i][obj] : a[i][obj];
+      obj[key] = !obj[key] ? arr[i][key] : obj[key] + arr[i][key]
     }
   }
 
 console.log(ans);
 
-// this line above => ans[obj] = ans[obj] ? ans[obj] + a[i][obj] : a[i][obj] is same as below;
-
-var arr = [{a: 2, b: 5, c: 6}, {a:3, b: 4, d:1},{a: 1, d: 2}];
-var obj = {};
-  for(var i = 0; i < arr.length; ++i){
-    for(var prop in arr[i]){
-     if(obj[prop])
-        obj[prop] = obj[prop] + arr[i][prop];
-     else 
-        obj[prop] = arr[i][prop];
-    }
+  var s = "This is a long string";
+  
+  var middle = Math.floor(s.length / 2);
+  var before = s.lastIndexOf(' ', middle);
+  var after = s.indexOf(' ', middle + 1);
+  
+  if (middle - before < after - middle) {
+      middle = before;
+  } else {
+      middle = after;
   }
+  
+  var s1 = s.substr(0, middle);
+  var s2 = s.substr(middle + 1)
 
+  // (This code assumes that there actually are spaces on both sides of the middle. You would also add checks for before and after being -1.)
+  if (before == -1 || (after != -1 && middle - before >= after - middle)) {
+    middle = after;
+} else {
+    middle = before;
+}
+
+function longestWord(str) {
+  var longestWord = str.split(' ').sort(function(a, b) { return b.length - a.length; });
+  return longestWord[0].length;
+}
+findLongestWord("The quick brown fox jumped over the lazy dog");
+
+
+function longestWord(str) {
+  var longestWord = str.split(' ').reduce(function(longest, currentWord) {
+    return currentWord.length > longest.length ? currentWord : longest;
+  }, "");
+  return longestWord.length;
+}
+findLongestWord("The quick brown fox jumped over the lazy dog");
+  
 
