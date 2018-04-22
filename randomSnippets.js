@@ -1178,4 +1178,34 @@ function longestWord(str) {
 }
 findLongestWord("The quick brown fox jumped over the lazy dog");
   
+// adding private methods/variables to object literal. 
+
+let obj = {
+  tables: {
+    customers:(function(){
+      var privateVar = 'foo';
+      return { 
+        cols:[ /*here*/ ],
+        rows:[ /*here*/ ],
+        getPrivateVar: function()
+        {
+          return privateVar;
+        }
+      };
+    }()),
+    orders:{
+      cols:[ /*here*/ ],
+      rows:[ /*here*/ ]
+    }
+  },
+  relations: [{
+    parent:'customers', 
+    child:'orders', 
+    keyparent:'custid', 
+    keychild:'orderid',
+    onetomany:true
+  }]
+};
+
+dataset.tables.customers.getPrivateVar()
 
