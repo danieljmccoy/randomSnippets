@@ -1241,3 +1241,286 @@ function hexToRgb(hex) {
 alert( hexToRgb("#0033ff").g ); // "51";
 alert( hexToRgb("#03f").g ); // "51";
 
+// weird passing alert like that up top and the argument at the bottom in the iife params. look into this a bit.
+function() {
+  return alert;
+}
+)()("Boo!")
+
+
+// removing single item from array without mutating original eg splice
+let value = 3
+
+let arr = [1, 2, 3, 4, 5, 3]
+
+arr = arr.filter(item => item !== value)
+
+console.log(arr)
+// [ 1, 2, 4, 5 ]
+
+
+
+// removing multiple items from array without mutating original eg splice.
+let forDeletion = [2, 3, 5];
+let arr = [1, 2, 3, 4, 5, 3];
+
+arr = arr.filter(item => !forDeletion.includes(item))
+// !!! Read below about array.includes(...) support !!!
+
+console.log(arr)
+// [ 1, 4 ]
+
+
+
+// removing multiple items from Array using This-Binding Syntax.
+// array-lib.js
+export function remove(...forDeletion) {
+  return this.filter(item => !forDeletion.includes(item))
+}
+
+// main.js
+import { remove } from './array-lib.js'
+
+let arr = [1, 2, 3, 4, 5, 3]
+
+// :: This-Binding Syntax Proposal
+// using "remove" function as "virtual method"
+// without extending Array.prototype
+arr = arr::remove(2, 3, 5)
+console.log(arr)
+// [ 1, 4 ]
+
+
+// adding multiple handlers to single instance
+['click','ontouchstart'].forEach( evt => 
+  element.addEventHandler(evt, dosomething, false)
+);
+
+
+// sweet little function that could be the basis for several other similar type functions
+
+let arr = [ "3", "5", "31", "71", "12" ];
+
+let largestDiff = (...arr) => {
+let numberedArr = arr.map((el) => parseInt(el, 10));
+
+let min = Math.min(...numberedArr);
+let max = Math.max(...numberedArr);
+
+let largestDifference = max - min;
+  return largestDifference;
+}
+
+largestDiff(...arr);
+
+ 
+
+// getting and giving values to sparse arrays to make them dense so you can iterate over them. These functions are nothing I solved myself. These functions are via Dr. Rauschmayer and can be good little helper type functions in the right situation. Brandon Benvie mentioned a trick for creating a dense array on the es-discuss mailing list:  
+
+let a = Array.apply(null, Array(3));                                                                                                                                                                    
+// the above invocation is equivalent to:
+Array(undefined, undefined, undefined);
+
+// a.length
+3
+// a[0]
+undefined;
+
+// however, you can now iterate over the elements, e.g. to fill the array with values:
+a.forEach(function (x, i) { console.log( i+". "+x ) });
+
+0. undefined
+1. undefined
+2. undefined
+
+// and finally, assign the index of  1, 2, 3 as the values in the final step.
+a.map(function (x, i) { return i })
+[ 0, 1, 2 ]
+
+// better more current examples:
+Array(5).fill()
+[undefined, undefined, undefined, undefined, undefined]
+
+// works in everything except some versions of IE? check on that.
+Array.from({length: 20}, (x,i) => i);
+
+// and finally, the best/ideal version imo
+[...Array(5).keys()];
+[0, 1, 2, 3, 4]
+
+// Array.prototype.filter function skips non exist elements, thus it can be used to transform sparse to dense arrays.
+
+var sparse = [0, , ,];
+var dense = sparse.filter(function() {
+   return true;
+});
+
+
+// removing double quotes around strings //exa => `"daniel", "randy", "savage"`
+let someString = `"daniel", "randy", "savage"`;
+let trimmedAndQuotesRemoved = [];
+
+let removeExtraQuotes = someString.replace(/['"]+/g, '');
+
+let quotesToArray = removeExtraQuotes.split(",")
+
+quotesToArray.forEach((el, ind) => {
+  trimmedAndQuotesRemoved.push((el.trim()))
+})
+
+console.log(trimmedAndQuotesRemoved)
+// ["daniel", "randy", "savage"]
+
+
+
+// 
+function calculatePercent(amount, percent) {
+  const amountDecimals = getNumberOfDecimals(amount);
+  const percentDecimals = getNumberOfDecimals(percent);
+  const amountAsInteger = Math.round(amount + `e${amountDecimals}`);
+  const percentAsInteger = Math.round(percent + `e${percentDecimals}`);
+  const precisionCorrection = `e-${amountDecimals + percentDecimals + 2}`;    // add 2 to scale by an additional 100 since the percentage supplied is 100x the actual multiple (e.g. 35.8% is passed as 35.8, but as a proper multiple is 0.358)
+
+  return Number((amountAsInteger * percentAsInteger) + precisionCorrection);
+}
+
+function getNumberOfDecimals(number) {
+  const decimals = parseFloat(number).toString().split('.')[1];
+
+  if (decimals) {
+      return decimals.length;
+  }
+
+  return 0;
+}
+
+calculatePercent(20.05, 10); // 2.005 first param = Total number, second param = percent of total number to calculate
+
+
+//operation to do quick and dirty floating point adds (*10*10/10)
+let x = (0.2 * 10 + 0.1 * 10) / 10; 
+
+
+
+function stringAlmostFunctor(value, fn) {
+  var chars = value.split("")
+  return chars.map(function(char){
+    return String.fromCharCode(fn(char.charCodeAt(0)))
+  }).join("");
+}
+
+function plus1(value) {
+  return value + 1
+}
+
+function minus1(value) {
+  return value - 1
+}
+
+[3, 4].map(plus1);
+stringAlmostFunctor("ABC", plus1);  // BCD
+stringAlmostFunctor("XYZ", minus1); // WXY
+
+
+
+let talk = function() {
+  console.log(this.sound);
+}
+
+let boromir = {
+  speak : talk, 
+  sound : 'The ring, I must have it!'
+}
+
+// js infers the 'this' for the object that invokes it. Just a different way than I normally see it as.
+boromir.speak
+
+// destructuring a callable object/function
+// pretend this object/these properties are what's returned from a function:
+function getUser() {
+  return {
+    name : "daniel mccoy",
+    email : "daniel@somewhere.com",
+    coast : "wessst coast"
+  }
+}
+
+var {name, email, coast} = getUser();
+console.log(coast)
+
+//Savings Calculator
+let price = 150;
+let sale = 25;
+let savings = (price * sale) / 100;
+let salePrice = price - savings;
+
+console.log(`Original Price: $${price.toFixed(2)}`);
+console.log(`Sale: ${sale}%`);
+console.log(`Sale Price: $${salePrice.toFixed(2)}`);
+console.log(`Savings: $${savings.toFixed(2)}`)
+
+
+
+function square() {
+  let numbers = [];
+  for (let number of arguments) {
+    numbers.push(number * number);
+  }
+return numbers;
+}
+
+square(2, 4, 7.5, 8, 11.5, 21); 
+
+
+  // We have two objects. One of them has a method called avg () that the other doesn't have
+    // So we will borrow the (avg()) method
+    var gameController = {
+      scores  : [20, 34, 55, 46, 77],
+      avgScore : null,
+      players : [
+        {name:"Tommy", playerID:987, age:23},
+        {name:"Pau", playerID:87, age:33}
+      ]
+      }
+  
+      var appController = {
+        scores : [900, 845, 809, 950],
+        avgScore : null,
+        avg : function () {
+  
+        var sumOfScores = this.scores.reduce (function (prev, cur, index, array) {
+          return prev + cur;
+        });
+  
+        this.avgScore = sumOfScores / this.scores.length;
+
+        }
+      }
+  
+      // If we run the code below,
+      // the gameController.avgScore property will be set to the average score from the appController object "scores" array
+     
+      // Don't run this code, for it is just for illustration; we want the appController.avgScore to remain null
+      gameController.avgScore = appController.avg();
+
+      // Note that we are using the apply () method, so the 2nd argument has to be an array—the arguments to pass to the appController.avg () method.
+      appController.avg.apply (gameController, gameController.scores);
+    
+      // The avgScore property was successfully set on the gameController object, even though we borrowed the avg () method from the appController object
+      console.log (gameController.avgScore); // 46.4
+    
+      // appController.avgScore is still null; it was not updated, only gameController.avgScore was updated
+      console.log (appController.avgScore); // null
+
+      // non-recursive fibonacci
+      var a = 0;
+      var b = 1;
+      var result;
+
+      for(var i = 1; i < 100; i++){
+        console.log(result);
+        result = a + b;
+        a = b;
+        b = result;
+      }
+
