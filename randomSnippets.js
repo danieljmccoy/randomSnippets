@@ -1528,7 +1528,7 @@ square(2, 4, 7.5, 8, 11.5, 21);
       function debounce(func, wait, immediate) {
         let timeout; 
         return () => {
-          // this is what will get called right away
+          // this is what will get called right away when the function is fired.
           let later = () => {
             timeout = null;
             if (!immediate) func.apply(this, arguments);
@@ -1546,3 +1546,4 @@ square(2, 4, 7.5, 8, 11.5, 21);
       }, 250);
       
       window.addEventListener('scroll', returnedFunction);
+
