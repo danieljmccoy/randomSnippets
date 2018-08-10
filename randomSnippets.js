@@ -1538,3 +1538,10 @@ square(2, 4, 7.5, 8, 11.5, 21);
           if (callNow) func.apply(this, arguments);
         };
       };
+
+      
+      let returnedFunction = debounce(function() {
+        // Event tuff goes here that you want to debounce as not to call too often and crash the browser
+      }, 250);
+      
+      window.addEventListener('INPUT EVENT HERE', returnedFunction);
