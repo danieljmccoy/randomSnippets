@@ -1525,26 +1525,24 @@ square(2, 4, 7.5, 8, 11.5, 21);
       }
 
     
-      function debounce(fn, wait, immediate) {  
-        let timeout
-        return (...args) => {
-          if (immediate && !timeout) {
-            fn.apply(this, args)
-          }
-          clearTimeout(timeout)
-          timeout = setTimeout(() => {
-            timeout = null
-            if (!immediate) {
-              fn.apply(this, args)
-            }
-          }, wait)
-        }
-      }
-      
+      function debounce(func, wait, immediate) {
+        let timeout; 
+        return () => {
+          // this is what will get called right away
+          let later = () => {
+            timeout = null;
+            if (!immediate) func.apply(this, arguments);
+          };
+          let callNow = immediate && !timeout;
+          clearTimeout(timeout);
+          timeout = setTimeout(later, wait);     
+          if (callNow) func.apply(this, arguments);
+        };
+      };
 
       
       let returnedFunction = debounce(function() {
-        // Stuff goes here that you want to debounce as not to call too often and crash the browser
+        // Stuff goes here that you want to debounce as not to call too frequently and crash the browser
       }, 250);
       
-      window.addEventListener('INPUT EVENT HERE', returnedFunction);
+      window.addEventListener('scroll', returnedFunction);
