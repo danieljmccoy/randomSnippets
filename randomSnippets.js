@@ -1524,3 +1524,17 @@ square(2, 4, 7.5, 8, 11.5, 21);
         b = result;
       }
 
+    
+      function debounce(func, wait, immediate) {
+        let timeout; 
+        return () => {
+          let later = function() {
+            timeout = null;
+            if (!immediate) func.apply(this, arguments);
+          };
+          let callNow = immediate && !timeout;
+          clearTimeout(timeout);
+          timeout = setTimeout(later, wait);     
+          if (callNow) func.apply(this, arguments);
+        };
+      };
