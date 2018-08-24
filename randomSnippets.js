@@ -91,9 +91,9 @@ function fromListToObject(source) {
 */
 
 function transformEmployeeData(array) {
-  return array.map(function(a){
+  return array.map(function(el){
     var obj = {};
-    a.map(function(b){
+    el.map(function(b){
       obj[b[0]] = b[1];
     })
     return obj;
@@ -304,7 +304,7 @@ function removeFromBackOfNew(array) {
   var realArr = "somethingDumb"
   arr.pop()
   if (arr !== true)
-    realArr = "somethingFuckingCrazy"
+    realArr = "somethingCrazy"
   return arr;
 }
 
@@ -1313,7 +1313,14 @@ let largestDifference = max - min;
 
 largestDiff(...arr);
 
- 
+
+ // basic Knuth Shuffle, es6 makes this sooo much cleaner
+ function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]]; // eslint-disable-line no-param-reassign
+  }
+}
 
 // getting and giving values to sparse arrays to make them dense so you can iterate over them. These functions are nothing I solved myself. These functions are via Dr. Rauschmayer and can be good little helper type functions in the right situation. Brandon Benvie mentioned a trick for creating a dense array on the es-discuss mailing list:  
 
@@ -1524,15 +1531,26 @@ square(2, 4, 7.5, 8, 11.5, 21);
         b = result;
       }
 
+      // run once to no-op function
+      function once(fn, thisArg){
+        var hasBeenCalled = false;
+        return function(){
+            if(!hasBeenCalled){
+                hasBeenCalled = true;
+                return fn.apply(thisArg, arguments)
+            }
+        }
+      }
+
     
       function debounce(func, wait, immediate) {
         let timeout; 
         return () => {
-          // this is what will get called right away when the function is fired.
           let later = () => {
             timeout = null;
             if (!immediate) func.apply(this, arguments);
           };
+             // this is what will get called right away when the function is fired.
           let callNow = immediate && !timeout;
           clearTimeout(timeout);
           timeout = setTimeout(later, wait);     
@@ -1547,3 +1565,346 @@ square(2, 4, 7.5, 8, 11.5, 21);
       
       window.addEventListener('scroll', returnedFunction);
 
+
+var deliveries = [
+        {
+          "id": 1,
+          "destination": 'Oakland',
+          "orderPrice": 75,
+          "rushDelivery": true,
+          "rushDeliveryFee": 12.75,
+          "orderDate": "4 April 2016"
+        },
+        {
+          "id": 2,
+          "destination": 'San Jose',
+          "orderPrice": 62.75,
+          "orderDate": "5 April 2016"
+        },
+        {
+          "id": 3,
+          "destination": 'San Francisco',
+          "orderPrice": 15.00,
+          "rushDelivery": true,
+          "rushDeliveryFee": 50.75,
+          "orderDate": "10 April 2016"
+        },
+        {
+          "id": 4,
+          "destination": 'San Francisco',
+          "orderPrice": 25,
+          "orderDate": "4/11/2016"
+        },
+        {
+          "id": 5,
+          "destination": 'San Francisco',
+          "orderPrice": 90,
+          "rushDelivery": true,
+          "rushDeliveryFee": 30,
+          "orderDate": "April 12, 2015"
+        },
+        {
+          "id": 6,
+          "destination": 'Berkeley',
+          "orderPrice": 45,
+          "orderDate": "4/01/2015"
+        },
+        {
+          "id": 7,
+          "destination": 'Berkeley',
+          "orderPrice": 62.16,
+          "orderDate": "12 April 2016"
+        }
+      ];
+      
+      
+function getDeliveries(arr) {
+  var object = {};
+  
+  arr.map(function(el, ind) {
+    return object[el.destination] = (object[arr[ind].destination] || 0) + 1;
+  })
+
+  return object;
+}
+      
+getDeliveries(deliveries);
+     
+// {Oakland: 1, San Jose: 1, San Francisco: 3, Berkeley: 2}
+
+var daniel = {
+  firstName: "daniel",
+  sayHi : function() {
+    setTimeout(function() {
+      console.log("Hi " + this.firstName)
+    }, 1000)
+  }
+}
+
+
+
+function list(type) {
+  var result = '<' + type + 'l><li>';
+  var args = Array.prototype.slice.call(arguments, 1);
+  result += args.join('</li><li>');
+  result += '</li></' + type + 'l>'; // end list
+
+  return result;
+
+  var listHTML = list('u', 'One', 'Two', 'Three');
+  
+  /* listHTML is:
+  
+  "<ul><li>One</li><li>Two</li><li>Three</li></ul>"
+  
+  */
+
+
+  function sumEvenArguments(){
+    var newArgs = [].slice.call(arguments);
+    return newArgs.reduce(function(acc,next){
+        if(next % 2 === 0){
+            return acc+next;
+        }
+        return acc;
+    },0)
+  }
+  
+  sumEvenArguments(2, 6, 12, 3, 7, 8, 4) //32
+  
+  
+  
+  
+  function invokeMax(fn, num){
+    var max = 0;
+    return function(){
+        if(max >= num) return "Maxed Out!";
+        max++;
+        return fn.apply(this,arguments);
+    }
+  }
+  
+  function add(a,b){
+    return a+b
+  }
+  
+  var addOnlyThreeTimes = invokeMax(add,3);
+  addOnlyThreeTimes(1,2) // 3
+  addOnlyThreeTimes(2,2) // 4
+  addOnlyThreeTimes(1,2) // 3
+  addOnlyThreeTimes(1,2) // "Maxed Out!"
+  
+  
+  
+  
+  
+  
+  function once(fn, thisArg){
+    var hasBeenCalled = false;
+    return function(){
+        if(!hasBeenCalled){
+            hasBeenCalled = true;
+            return fn.apply(thisArg, arguments)
+        }
+    }
+  }
+  
+  function add(a,b){
+    return a+b
+  }
+  
+  var addOnce = once(add, this);
+    addOnce(2,2) // 4
+    addOnce(2,2) // undefined
+    addOnce(2,2) // undefined
+      
+  function doMath(a,b,c){
+    return this.firstName + " adds " + (a+b+c)
+  }
+      
+  var instructor = {firstName: "Daniel"}
+  var doMathOnce = once(doMath, instructor);
+  doMathOnce(1,2,3) // "Daniel adds 6"
+  doMathOnce(1,2,3) // undefined
+  
+  
+  
+  
+  
+  function flip(fn, thisArg){
+    var outerArgs = [].slice.call(arguments,2)
+    return function(){
+        var innerArgs = [].slice.call(arguments)
+        var allArgs = outerArgs.concat(innerArgs).slice(0, fn.length)
+        return fn.apply(thisArg, allArgs.reverse())
+    }
+  }
+  
+  function personSubtract(a,b,c){
+    return this.firstName + " subtracts " + (a-b-c);
+  }
+      
+  var person = {
+    firstName: 'Daniel'
+  }
+      
+  var flipFn = flip(personSubtract, person);
+    flipFn(3,2,1) // "Daniel subtracts -4"
+      
+  var flipFn2 = flip(personSubtract, person, 5,6);
+    flipFn2(7,8) // "Daniel subtracts -4"
+  
+  
+  
+  
+    function bind(fn, thisArg){
+      var outerArgs = [].slice.call(arguments,2)
+      return function(){
+          var innerArgs = [].slice.call(arguments)
+          var allArgs = outerArgs.concat(innerArgs)
+          return fn.apply(thisArg, allArgs)
+      }
+    }
+    
+    function firstNameFavoriteColor(favoriteColor){
+      return this.firstName + "'s favorite color is " + favoriteColor
+    }
+        
+    var person = {
+      firstName: 'Daniel'
+    }
+        
+    var bindFn = bind(firstNameFavoriteColor, person);
+      bindFn('green') // "Daniel's favorite color is green"
+        
+    var bindFn2 = bind(firstNameFavoriteColor, person, 'blue');
+      bindFn2('green') // "Daniel's favorite color is blue"
+        
+    function addFourNumbers(a,b,c,d){
+      return a+b+c+d;
+    }
+    
+    bind(addFourNumbers,this,1)(2,3,4) // 10
+    bind(addFourNumbers,this,1,2)(3,4) // 10
+    bind(addFourNumbers,this,1,2,3)(4) // 10
+    bind(addFourNumbers,this,1,2,3,4)() // 10
+    bind(addFourNumbers,this)(1,2,3,4) // 10
+    bind(addFourNumbers,this)(1,2,3,4,5,6,7,8,9,10) // 10
+  
+  
+  
+  
+  
+  var animals = [
+    { species: 'Lion', name: 'King' },
+    { species: 'Whale', name: 'Fail' }
+  ];
+  
+  for (var i = 0; i < animals.length; i++) {
+    (function(i) {
+      this.print = function() {
+        console.log('#' + i + ' ' + this.species
+                    + ': ' + this.name);
+      }
+      this.print();
+    }).call(animals[i], i);
+  }
+  
+  
+  /**
+   * A faster alternative to `Function#apply`, this function invokes `func`
+   * with the `this` binding of `thisArg` and the arguments of `args`.
+   *
+   * @private
+   * @param {Function} func The function to invoke.
+   * @param {*} thisArg The `this` binding of `func`.
+   * @param {Array} args The arguments to invoke `func` with.
+   * @returns {*} Returns the result of `func`.
+   */
+  function apply(func, thisArg, args) {
+    switch (args.length) {
+      case 0: return func.call(thisArg);
+      case 1: return func.call(thisArg, args[0]);
+      case 2: return func.call(thisArg, args[0], args[1]);
+      case 3: return func.call(thisArg, args[0], args[1], args[2]);
+    }
+    return func.apply(thisArg, args);
+  }
+  
+  module.exports = apply;
+  
+  var obj = {num:2};
+  
+  function addToThis(a){
+    return this.num + a;
+  }
+  
+  addToThis.call(obj, 3); //functionname.call(obj, functionarguments)
+  //takes a function and calls it on an object.  You can pass in arguments to the function that will effect the object
+  //essentially, it attaches a function to an object temporarily, runs it, and gives the result
+  //executes a function in the context of the scope (object) that it's passed.
+  
+  var obj = {num:2};
+  
+  function addToThis(a){
+    return this.num + a + b + c;
+  }
+  
+  var arr = [1, 2, 3];
+  addToThis.apply(obj, arr));
+  
+  
+  arr = ["daniel", "fulu", "noidea"];
+  var arrToUp = String.prototype.toUpperCase.apply(arr).split(",");
+  // arrToUp = "DANIEL, FULU, NOIDEA"
+  
+  
+  var x = ['a', 'b', 'c'];
+  var y = ['d', 'e', 'f'];
+  x.push.apply(x, y);
+  // x = ['a', 'b', 'c', 'd', 'e', 'f']
+  // y = ['d', 'e', 'f']  (remains unchanged)
+  
+  
+  // lesser alternative to feeding arguments vis spread op to Math.max()
+  var callMe(fn, ...args) {
+    return fn.apply(args);
+  }
+  callMe(Math.max, 4, 7, 6); //7 
+
+
+  // sprad operator beauty, from Angus Croll's blog
+  var stats = function(...numbers) {
+    for (var i=0, total = 0, len=numbers.length; i<len; i++) {
+        total += numbers[i]; 
+    } 
+    return {
+        average: total / arguments.length,
+        max: Math.max(numbers); //spread array into formal params
+    } 
+} 
+ 
+stats(5, 6, 8, 5); //{average: 6, max: 8}
+
+
+// partial application from Angus Croll's blog
+Function.prototype.curry = function() {
+  if (arguments.length<1) {
+    return this; //nothing to curry with - return function
+  }
+  var __method = this;
+  var args = [].slice.apply(arguments);
+    return function() {
+      return __method.apply(this, args.concat([].slice.apply(arguments)));
+    }
+}
+ 
+var converter = function(ratio, symbol, input) {
+    return [(input*ratio).toFixed(1),symbol].join(" ");
+}
+ 
+var kilosToPounds = converter.curry(2.2,"lbs");
+var milesToKilometers = converter.curry(1.62, "km");
+ 
+kilosToPounds(4); //8.8 lbs
+milesToKilometers(34); //55.1 km
